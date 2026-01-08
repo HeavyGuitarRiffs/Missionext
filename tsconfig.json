@@ -1,7 +1,6 @@
 {
   "compilerOptions": {
     "baseUrl": ".",
-    "ignoreDeprecations": "6.0",
 
     "target": "ES2017",
     "lib": ["dom", "dom.iterable", "esnext"],
@@ -19,15 +18,13 @@
     "jsx": "react-jsx",
     "incremental": true,
 
-    "plugins": [
-      { "name": "next" }
-    ],
+    "plugins": [{ "name": "next" }],
 
     "paths": {
-  "@/*": ["./*"],
-  "@/components/*": ["components/*"],
-  "@/lib/*": ["lib/*"]
-}
+      "@/*": ["./*"],
+      "@/components/*": ["components/*"],
+      "@/lib/*": ["lib/*"]
+    }
   },
   "include": [
     "next-env.d.ts",
