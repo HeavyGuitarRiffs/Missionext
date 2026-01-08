@@ -1,0 +1,39 @@
+{-# LANGUAGE OverloadedStrings #-}
+
+import Web.Scotty
+import Database.SQLite.Simple
+import Database.SQLite.Simple.FromRow
+import Data.Aeson (FromJSON)
+import Control.Monad.IO.Class (liftIO)
+import Network.HTTP.Types.Status (status204)
+
+-- Incoming click payload
+data Click = Click { platform :: String }
+instance FromJSON Click
+
+main :: IO ()
+main = do
+  conn <- open "contact.db"
+
+  execute_ conn
+    "CREATE TABLE IF NOT EXISTS contact_clicks (\
+    \platform TEXT PRIMARY KEY,\
+    \count INTEGER NOT NULL\
+    \)"
+
+  scotty 4000 $ do
+
+    post "/contact-click" $ do
+      Click p <- jsonData
+      liftIO $
+        execute conn
+          "INSERT INTO contact_clicks (platform, count) VALUES (?,1) \
+          \ON CONFLICT(platform) DO UPDATE SET count = count + 1"
+          (p :: String)
+      status status204
+
+    get "/contact-stats" $ do
+      rows <- liftIO $
+        query_ conn
+          "SELECT platform, count FROM contact_clicks"
+      json (rows :: [(String, Int)])
