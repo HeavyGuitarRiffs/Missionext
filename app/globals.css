@@ -1,5 +1,10 @@
 @import "tailwindcss";
 
+:root {
+  --font-serif: "Times New Roman", Times, serif;
+}
+
+
 /* CSS variables */
 :root {
   --radius: 0.625rem;
